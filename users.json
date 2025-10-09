@@ -1,0 +1,64 @@
+{
+  "users": {
+    "uid001": {
+      "name": "Anagha",
+      "email": "anagha.jeevan@gmail.com",
+      "age": 50,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid002": {
+      "name": "Beena",
+      "email": "beena.s@gmail.com",
+      "age": 70,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid003": {
+      "name": "Chaitra",
+      "email": "chaitra@gmail.com",
+      "age": 62,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid004": {
+      "name": "Deepa",
+      "email": "deepa.dev@gmail.com",
+      "age": 58,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid005": {
+      "name": "Elen",
+      "email": "elen.davis@gmail.com",
+      "age": 75,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid006": {
+      "name": "Mitra",
+      "email": "mitra@gmail.com",
+      "age": 87,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid007": {
+      "name": "Meenakshi",
+      "email": "meenakshi.anil@gmail.com",
+      "age": 62,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid008": {
+      "name": "Hiya",
+      "email": "hiya.p@gmail.com",
+      "age": 74,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid009": {
+      "name": "Priyal",
+      "email": "priyal.tiwari@gmail.com",
+      "age": 59,
+      "createdAt": "2025-09-29T09:30:00Z"
+    },
+    "uid010": {
+      "name": "Riya Nayak",
+      "email": "riya.nayak@gmail.com",
+      "age": 86,
+      "createdAt": "2025-09-29T09:30:00Z"
+    }
+  }
+}
