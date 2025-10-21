@@ -1,8 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useApp } from '@/src/lib/context/AppContext'
+import { useAuth } from '@/lib/context/AuthContext'
 import { UserAvatar } from '@/src/components/ui/UserAvatar'
 import { ProfileIcon } from '@/src/components/ui/ProfileIcon'
 import imgImage2 from "@/assets/47243cdeba5524e77ffe61ec138b163174d97bef.png"
@@ -10,24 +11,87 @@ import imgImage3 from "@/assets/8934c08138832d203b27de68634a565c5a720853.png"
 import imgImage4 from "@/assets/b63a088baeee6c767fd80a6e91af96cd71cdfd70.png"
 import imgImage5 from "@/assets/c846a00cd019247848e76f1836c41d9aea45c9d3.png"
 
+interface NextReminder {
+  medicineName: string
+  dosage: string
+  timeUntil: string
+}
+
 export default function DashboardPage() {
   const { navigateTo } = useApp()
+  const { user } = useAuth()
+  const [nextReminder, setNextReminder] = useState<NextReminder | null>(null)
+  const [username, setUsername] = useState<string>('User')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (user?.uid) {
+      fetchNextReminder()
+      fetchUsername()
+    }
+  }, [user?.uid])
+
+  const fetchNextReminder = async () => {
+    if (!user?.uid) return
+    try {
+      const response = await fetch(`/api/medicine/reminders?userId=${user.uid}`)
+      const data = await response.json()
+      console.log('Dashboard reminder data:', data)
+      if (data.success && data.nextReminder) {
+        setNextReminder(data.nextReminder)
+      }
+    } catch (error) {
+      console.error('Error fetching next reminder:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchUsername = async () => {
+    if (!user?.uid) return
+    try {
+      const response = await fetch(`/api/auth/profile?userId=${user.uid}`)
+      const data = await response.json()
+      if (data.user?.name) {
+        setUsername(data.user.name)
+      }
+    } catch (error) {
+      console.error('Error fetching username:', error)
+    }
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f0ecec]">
       <div className="relative h-[956px] w-[440px] overflow-clip bg-[#f0ecec]" data-name="dashboard">
         <UserAvatar />
         <p className="absolute font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold h-[36px] leading-[normal] left-[258.5px] text-[23px] text-black text-center top-[61px] tracking-[1.38px] translate-x-[-50%] w-[373px]" style={{ fontVariationSettings: "'wdth' 100" }}>
-          Welcome back, [username]
+          Welcome back, {username}
         </p>
         
-        {/* Medicine Reminder */}
-        <div className="absolute bg-[#060a24] h-[103px] left-[20px] rounded-[12px] top-[139px] w-[403px]">
-          <div className="absolute font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold h-[91px] leading-[0] left-[31px] text-[0px] text-white top-[151px] tracking-[1.38px] w-[392px]" style={{ fontVariationSettings: "'wdth' 100" }}>
-            <p className="leading-[normal] mb-0 text-[24px]">Medicine Reminder!</p>
-            <p className="leading-[33px] text-[20px] tracking-[0.8px] whitespace-pre-wrap" style={{ fontVariationSettings: "'wdth' 100" }}>{`Meftal 650                                        2:00 PM`}</p>
+        {/* Medicine Reminder - Using Priority Queue */}
+        {nextReminder ? (
+          <div className="absolute bg-[#060a24] h-[103px] left-[20px] rounded-[12px] top-[139px] w-[403px] flex items-center justify-between px-[31px]">
+            <div className="flex flex-col justify-center">
+              <p className="font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold text-[24px] text-white tracking-[1.38px]" style={{ fontVariationSettings: "'wdth' 100" }}>
+                Medicine Reminder!
+              </p>
+              <p className="font-['Instrument_Sans:Regular',_sans-serif] text-[20px] text-white tracking-[0.8px] mt-[4px]" style={{ fontVariationSettings: "'wdth' 100" }}>
+                {nextReminder.medicineName} {nextReminder.dosage}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="font-['Instrument_Sans:Bold',_sans-serif] font-bold text-[20px] text-[#4ade80]" style={{ fontVariationSettings: "'wdth' 100" }}>
+                {nextReminder.timeUntil}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="absolute bg-[#060a24] h-[103px] left-[20px] rounded-[12px] top-[139px] w-[403px] flex items-center justify-center">
+            <p className="font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold text-[20px] text-white" style={{ fontVariationSettings: "'wdth' 100" }}>
+              No medicines scheduled
+            </p>
+          </div>
+        )}
 
         {/* Category Cards */}
         <button 

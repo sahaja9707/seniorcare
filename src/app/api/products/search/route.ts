@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebaseAdmin';
-import { buildBSTFromProducts, search } from '@/lib/bst';
+import { buildBSTFromProducts, search, searchPartial } from '@/lib/bst';
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,17 +24,18 @@ export async function GET(request: NextRequest) {
     // Build BST from products
     const root = buildBSTFromProducts(products);
 
-    // Search for product
-    const result = search(root, productName.toLowerCase().trim());
+    // Search for products with partial key match
+    const results = searchPartial(root, productName.toLowerCase().trim());
 
-    if (result && result.data) {
+    if (results.length > 0) {
       return NextResponse.json({
         success: true,
-        product: result.data
+        products: results.map(node => node.data),
+        count: results.length
       });
     } else {
       return NextResponse.json(
-        { success: false, message: 'Product not found' },
+        { success: false, message: 'No products found', products: [] },
         { status: 404 }
       );
     }

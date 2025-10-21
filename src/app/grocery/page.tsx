@@ -47,7 +47,7 @@ export default function GroceryPage() {
     }
   }
 
-  // Filter items based on search query using BST search
+  // Filter items based on search query using BST search with partial key matching
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
       loadProducts()
@@ -56,14 +56,15 @@ export default function GroceryPage() {
 
     try {
       setLoading(true)
-      const result = await searchProduct(searchQuery)
-      if (result) {
-        setProducts([result])
+      const results = await searchProduct(searchQuery)
+      if (Array.isArray(results) && results.length > 0) {
+        setProducts(results as Product[])
       } else {
         setProducts([])
       }
     } catch (err) {
       console.error('Error searching:', err)
+      setProducts([])
     } finally {
       setLoading(false)
     }

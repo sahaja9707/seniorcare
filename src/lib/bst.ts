@@ -39,6 +39,32 @@ export function search(root: BSTNode | null, key: string): BSTNode | null {
   }
 }
 
+/**
+ * Search for all products containing the partial key
+ * Uses in-order traversal to collect all matching results
+ */
+export function searchPartial(root: BSTNode | null, partialKey: string): BSTNode[] {
+  const results: BSTNode[] = [];
+  
+  function inOrderTraversal(node: BSTNode | null) {
+    if (node === null) return;
+    
+    // Traverse left subtree
+    inOrderTraversal(node.left);
+    
+    // Check if current node key contains the partial key
+    if (node.key.includes(partialKey.toLowerCase())) {
+      results.push(node);
+    }
+    
+    // Traverse right subtree
+    inOrderTraversal(node.right);
+  }
+  
+  inOrderTraversal(root);
+  return results;
+}
+
 export function buildBSTFromProducts(products: any[]): BSTNode | null {
   let root: BSTNode | null = null;
   

@@ -313,7 +313,7 @@ export function useCart(userId?: string) {
 }
 
 /**
- * Search for products using BST via API
+ * Search for products using BST via API with partial key matching
  */
 export async function searchProduct(productName: string) {
   try {
@@ -322,14 +322,14 @@ export async function searchProduct(productName: string) {
     );
     const data = await response.json();
 
-    if (data.success) {
-      return data.product;
+    if (data.success && data.products) {
+      return data.products;
     } else {
-      return null;
+      return [];
     }
   } catch (error) {
     console.error('Error searching product:', error);
-    return null;
+    return [];
   }
 }
 
