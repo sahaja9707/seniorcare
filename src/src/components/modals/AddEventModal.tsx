@@ -1,18 +1,54 @@
-import React, { useState } from 'react'
-import { useApp } from '../../lib/context/AppContext'
+'use client'
 
-export const AddEventModal: React.FC = () => {
-  const { addEvent } = useApp()
+import React, { useState } from 'react'
+import { useApp } from '@/lib/context/AppContext'
+import { collection, addDoc, Timestamp } from 'firebase/firestore'
+import { db } from '@/lib/firebaseClient'
+
+interface AddEventModalProps {
+  refreshEvents?: () => void
+}
+
+export const AddEventModal: React.FC<AddEventModalProps> = ({ refreshEvents }) => {
+  const { closeModal } = useApp()
   const [eventName, setEventName] = useState('')
   const [eventDate, setEventDate] = useState('')
   const [eventTime, setEventTime] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = () => {
-    if (eventName && eventDate && eventTime) {
-      addEvent(eventName, eventDate, eventTime)
+  const handleSubmit = async () => {
+    if (!eventName || !eventDate || !eventTime) {
+      alert('Please fill in all fields')
+      return
+    }
+
+    try {
+      setLoading(true)
+      const eventsRef = collection(db, 'events')
+      await addDoc(eventsRef, {
+        name: eventName,
+        date: eventDate,
+        time: eventTime,
+        createdAt: Timestamp.now()
+      })
+      
+      // Refresh the events list
+      if (refreshEvents) {
+        refreshEvents()
+      }
+      
+      // Close the modal
+      closeModal()
+      
+      // Reset form
       setEventName('')
       setEventDate('')
       setEventTime('')
+    } catch (error) {
+      console.error('Error adding event:', error)
+      alert('Failed to add event. Please try again.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -40,11 +76,12 @@ export const AddEventModal: React.FC = () => {
         onChange={(e) => setEventTime(e.target.value)}
       />
       <button 
-        className="absolute bg-[#bd4444] h-[30px] left-[278px] rounded-[8px] top-[330px] w-[80px] cursor-pointer"
+        className="absolute bg-[#bd4444] h-[30px] left-[278px] rounded-[8px] top-[330px] w-[80px] cursor-pointer disabled:opacity-50"
         onClick={handleSubmit}
+        disabled={loading}
       >
         <div className="absolute flex flex-col font-['Instrument_Sans:Bold',_sans-serif] font-bold h-[26px] justify-end leading-[0] left-[18px] text-[20px] text-white top-[27px] tracking-[-0.2px] translate-y-[-100%] w-[53px]" style={{ fontVariationSettings: "'wdth' 100" }}>
-          <p className="leading-[normal]">ADD</p>
+          <p className="leading-[normal]">{loading ? 'ADDING...' : 'ADD'}</p>
         </div>
       </button>
     </div>

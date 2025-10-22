@@ -56,7 +56,7 @@ export default function EventsPage() {
         </div>
 
         {/* Other Events - Using Queue Data Structure */}
-        <div className="absolute left-[20px] top-[260px] w-[400px] flex flex-col gap-[18px]">
+        <div className="absolute left-[20px] top-[260px] w-[400px] h-[600px] overflow-y-auto flex flex-col gap-[18px] pr-2">
           {events.slice(1).map((event: Event) => (
             <div key={event.id} className="bg-[rgba(213,206,206,0.5)] h-[90px] w-full rounded-[12px] px-[24px] py-[16px]">
               <div className="flex justify-between items-center mb-2">

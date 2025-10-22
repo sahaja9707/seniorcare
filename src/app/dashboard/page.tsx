@@ -35,6 +35,9 @@ export default function DashboardPage() {
     if (!user?.uid) return
     try {
       const response = await fetch(`/api/medicine/reminders?userId=${user.uid}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch reminders')
+      }
       const data = await response.json()
       console.log('Dashboard reminder data:', data)
       if (data.success && data.nextReminder) {
@@ -50,13 +53,14 @@ export default function DashboardPage() {
   const fetchUsername = async () => {
     if (!user?.uid) return
     try {
-      const response = await fetch(`/api/auth/profile?userId=${user.uid}`)
-      const data = await response.json()
-      if (data.user?.name) {
-        setUsername(data.user.name)
+      // Use the display name from auth user if available
+      if (user?.displayName) {
+        setUsername(user.displayName)
+      } else {
+        setUsername(user?.email?.split('@')[0] || 'User')
       }
     } catch (error) {
-      console.error('Error fetching username:', error)
+      console.error('Error setting username:', error)
     }
   }
 
