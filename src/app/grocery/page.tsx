@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useApp } from '@/src/lib/context/AppContext'
+import { useApp } from '@/lib/context/AppContext'
 import { useAuth } from '@/lib/context/AuthContext'
 import { useCart } from '@/lib/hooks/useCart'
 import { searchProduct, getAllProducts } from '@/lib/hooks/useCart'

@@ -3,11 +3,9 @@ import { useApp } from '@/lib/context/AppContext';
 import { addDoc, collection, Firestore } from 'firebase/firestore';
 import { db } from '@/lib/firebaseClient';
 
-interface AddEventModalProps {
-  refreshEvents: () => Promise<void>;
-}
+import { AddEventModalProps } from './types';
 
-export const AddEventModal: React.FC<AddEventModalProps> = ({ refreshEvents }) => {
+export const AddEventModal = ({ refreshEvents }: AddEventModalProps) => {
   const { closeModal } = useApp();
   const [name, setName] = useState('');
   const [date, setDate] = useState('');

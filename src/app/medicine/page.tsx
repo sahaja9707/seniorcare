@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useApp } from '@/src/lib/context/AppContext'
+import { useApp } from '@/lib/context/AppContext'
 import { useAuth } from '@/lib/context/AuthContext'
 import { useMedicine } from '@/lib/hooks/useMedicine'
 import { UserAvatar } from '@/src/components/ui/UserAvatar'

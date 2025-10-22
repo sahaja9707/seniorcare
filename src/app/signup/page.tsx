@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { useApp } from '@/src/lib/context/AppContext'
+import { useApp } from '@/lib/context/AppContext'
 import { useAuth } from '@/lib/context/AuthContext'
 import imgImage1 from "@/assets/adf34d48bf7a198a375097795321c7f10f36f03c.png"
 
@@ -132,16 +132,6 @@ export default function SignupPage() {
           autoComplete="new-password"
         />
         
-        {/* Sign Up Button */}
-        <button 
-          className="absolute bg-[#060a24] h-[48px] left-[78px] rounded-[44px] top-[580px] w-[273px] cursor-pointer hover:bg-[#060a24]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleSignup}
-          disabled={loading}
-        >
-          <span className="text-white text-[17px] font-semibold tracking-[1.02px]">
-            {loading ? 'Creating Account...' : 'Sign Up'}
-          </span>
-        </button>
         {/* Sign Up Button */}
         <button 
           className="absolute bg-[#060a24] h-[48px] left-[78px] rounded-[44px] top-[580px] w-[273px] cursor-pointer hover:bg-[#060a24]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
