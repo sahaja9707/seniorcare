@@ -1,14 +1,25 @@
 'use client'
 
 import React from 'react'
-import { useApp } from '@/src/lib/context/AppContext'
+import { useApp } from '@/lib/context/AppContext'
 import { UserAvatar } from '@/src/components/ui/UserAvatar'
 import { BackButton } from '@/src/components/ui/BackButton'
 import { ProfileIcon } from '@/src/components/ui/ProfileIcon'
 import { AddEventModal } from '@/src/components/modals/AddEventModal'
+import { useEvents } from '@/lib/hooks/useEvents'
+import type { Event } from '@/lib/types'
 
 export default function EventsPage() {
-  const { state, navigateTo, openModal } = useApp()
+  const { navigateTo, openModal, state } = useApp()
+  const { events, loading, error, refreshEvents } = useEvents()
+
+  if (loading) {
+    return <div className="flex min-h-screen items-center justify-center">Loading events...</div>
+  }
+
+  if (error) {
+    return <div className="flex min-h-screen items-center justify-center text-red-500">{error}</div>
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f0ecec]">
@@ -30,17 +41,17 @@ export default function EventsPage() {
           </div>
           <div className="flex justify-between items-center">
             <div className="font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold text-[22px] tracking-[0.88px]" style={{ fontVariationSettings: "'wdth' 100" }}>
-              {state.events[0]?.name || 'Book Club Meeting'}
+              {events[0]?.name || 'Book Club Meeting'}
             </div>
             <div className="font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold text-[20px] tracking-[0.8px]" style={{ fontVariationSettings: "'wdth' 100" }}>
-              {state.events[0]?.time || '4:00PM'}
+              {events[0]?.time || '4:00PM'}
             </div>
           </div>
         </div>
 
         {/* Other Events - Using Queue Data Structure */}
         <div className="absolute left-[20px] top-[260px] w-[400px] flex flex-col gap-[18px]">
-          {state.events.slice(1).map((event) => (
+          {events.slice(1).map((event: Event) => (
             <div key={event.id} className="bg-[rgba(213,206,206,0.5)] h-[90px] w-full rounded-[12px] px-[24px] py-[16px]">
               <div className="font-['Instrument_Sans:SemiBold',_sans-serif] font-semibold text-[20px] text-black mb-[6px] tracking-[0.8px]" style={{ fontVariationSettings: "'wdth' 100" }}>
                 {event.name}
@@ -65,7 +76,7 @@ export default function EventsPage() {
         <ProfileIcon onClick={() => navigateTo('profile')} />
 
         {/* Modal */}
-        {state.currentModal === 'addEvent' && <AddEventModal />}
+        {state.currentModal === 'addEvent' && <AddEventModal refreshEvents={refreshEvents} />}
       </div>
     </div>
   )

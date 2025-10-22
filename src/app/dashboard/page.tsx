@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { useApp } from '@/src/lib/context/AppContext'
+import { useApp } from '@/lib/context/AppContext'
 import { useAuth } from '@/lib/context/AuthContext'
 import { UserAvatar } from '@/src/components/ui/UserAvatar'
 import { ProfileIcon } from '@/src/components/ui/ProfileIcon'

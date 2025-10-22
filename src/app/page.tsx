@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
-import { useApp } from '@/src/lib/context/AppContext'
+import {useApp} from '@/lib/context/AppContext'
 import imgImage1 from "@/assets/adf34d48bf7a198a375097795321c7f10f36f03c.png"
 
 export default function Home() {

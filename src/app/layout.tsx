@@ -1,8 +1,9 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AppProvider } from "@/src/lib/context/AppContext";
-import { AuthProvider } from "@/lib/context/AuthContext";
+import { Providers } from "@/components/Providers";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,9 @@ export default function RootLayout({
         style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
         <div className="w-full flex items-center justify-center">
-          <AuthProvider>
-            <AppProvider>
+            <Providers>
               {children}
-            </AppProvider>
-          </AuthProvider>
+            </Providers>
         </div>
       </body>
     </html>
